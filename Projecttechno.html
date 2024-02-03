@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #timer {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 0 10px;
+        }
+        input {
+            font-size: 1em;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <title>Countdown Timer</title>
+</head>
+<body>
+
+<input type="number" id="customTime" placeholder="Enter time in seconds">
+<button onclick="startTimer()">Start</button>
+<button onclick="stopTimer()">Stop</button>
+<button onclick="resetTimer()">Reset</button>
+<div id="timer">00:00:00</div>
+
+<script>
+    let timer;
+    let timeLeft = 0;
+
+    function startTimer() {
+        const customTime = document.getElementById("customTime").value;
+        if (!isNaN(customTime) && customTime > 0) {
+            timeLeft = parseInt(customTime, 10);
+            updateTimerDisplay();
+            if (!timer) {
+                timer = setInterval(updateTimer, 1000);
+            }
+        } else {
+            alert("Please enter a valid positive number.");
+        }
+    }
+
+    function stopTimer() {
+        clearInterval(timer);
+        timer = null;
+    }
+
+    function resetTimer() {
+        stopTimer();
+        document.getElementById("customTime").value = "";
+        timeLeft = 0;
+        updateTimerDisplay();
+    }
+
+    function updateTimer() {
+        if (timeLeft > 0) {
+            timeLeft--;
+            updateTimerDisplay();
+        } else {
+            stopTimer();
+            alert("Countdown complete!");
+        }
+    }
+
+    function updateTimerDisplay() {
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft % 3600) / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById("timer").innerText = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    function formatTime(time) {
+        return time < 10 ? `0${time}` : time;
+    }
+</script>
+
+</body>
+</html>
